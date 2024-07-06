@@ -1,0 +1,98 @@
+<!-- after choosing a city a image of flag will appear so at bottom right of the image of flag there would be city Name ....click on city name then 
+a drop down for choosing another city appears -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Time Alert</title>
+    <style>
+        .custom-select {
+            position: relative;
+            display: inline-block;
+        }
+
+        .select-items img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .select-selected {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+
+        .select-items {
+            position: absolute;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            z-index: 99;
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .select-items div {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .select-items div:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Select a city to see the current date and time</h1>
+    <div class="custom-select" id="city-select-container">
+        <div class="select-selected">Select a city</div>
+        <div class="select-items">
+            <div data-value="Europe/Paris"><img src="paris1.jpg" alt=""> Paris 🇫🇷</div>
+            <div data-value="Asia/Tokyo"><img src="tokyo.jpg" alt=""> Tokyo 🇯🇵</div>
+            <div data-value="Australia/Sydney"><img src="sydney.jpg" alt=""> Sydney 🇦🇺</div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.select-selected').addEventListener('click', function() {
+            document.querySelector('.select-items').style.display = 'block';
+        });
+
+        document.querySelectorAll('.select-items div').forEach(item => {
+            item.addEventListener('click', function() {
+                const city = this.getAttribute('data-value');
+                const cityName = this.innerText.trim();
+                document.querySelector('.select-selected').innerHTML = this.innerHTML;
+                document.querySelector('.select-items').style.display = 'none';
+                showTime(city, cityName);
+            });
+        });
+
+        function showTime(city, cityName) {
+            const now = new Date().toLocaleString("en-US", { 
+                timeZone: city, 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric', 
+                hour: 'numeric', 
+                minute: 'numeric', 
+                second: 'numeric', 
+                hour12: true 
+            });
+            alert(`It is ${now} in ${cityName}`);
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.select-selected')) {
+                document.querySelector('.select-items').style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>
